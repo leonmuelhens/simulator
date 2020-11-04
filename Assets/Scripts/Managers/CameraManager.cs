@@ -9,13 +9,21 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+    public bool stereoView;
+
     public GameObject SimulatorCameraPrefab;
+    public GameObject SimulatorStereoCameraPrefab;
+    private GameObject CameraPrefab;
+
     public Camera SimulatorCamera { get; private set; }
     private SimulatorCameraController CameraController;
     
     private void Awake()
     {
-        SimulatorCamera = Instantiate(SimulatorCameraPrefab, transform).GetComponentInChildren<Camera>();
+        if (stereoView) CameraPrefab = SimulatorStereoCameraPrefab;
+        else CameraPrefab = SimulatorCameraPrefab;
+
+        SimulatorCamera = Instantiate(CameraPrefab, transform).GetComponentInChildren<Camera>();
         CameraController = SimulatorCamera.GetComponentInParent<SimulatorCameraController>();
     }
 

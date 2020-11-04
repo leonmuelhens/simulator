@@ -1,0 +1,16 @@
+{
+    "name": "FH Aachen Powerwall",
+    "references": [
+        "GUID:846c95fa7e6d73b4288ff83d3114b14f",
+        "GUID:d56d02d9ecba1e34da427c04c7a23342"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

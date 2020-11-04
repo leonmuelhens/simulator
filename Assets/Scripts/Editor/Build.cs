@@ -529,6 +529,7 @@ namespace Simulator.Editor
         [SerializeField] bool BuildPlayer = false;
         [SerializeField] string PlayerFolder = string.Empty;
         [SerializeField] bool DevelopmentPlayer = false;
+        [SerializeField] bool stereoView = false;
 
         [MenuItem("Simulator/Build...", false, 30)]
         static void ShowWindow()
@@ -589,18 +590,19 @@ namespace Simulator.Editor
             EditorGUILayout.EndHorizontal();
 
             DevelopmentPlayer = GUILayout.Toggle(DevelopmentPlayer, "Development Build");
+            stereoView = GUILayout.Toggle(stereoView, "Stereo View");
             EditorGUI.EndDisabledGroup();
 
             if (GUILayout.Button("Build"))
             {
+                GameObject cameraManagerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Managers/CameraManager.prefab");
+                cameraManagerPrefab.GetComponent<CameraManager>().stereoView = stereoView;
+
                 Running = true;
-                try
-                {
+                try {
                     var assetBundlesLocation = Path.Combine(Application.dataPath, "..", "AssetBundles");
-                    if (BuildPlayer)
-                    {
-                        if (string.IsNullOrEmpty(PlayerFolder))
-                        {
+                    if (BuildPlayer) {
+                        if (string.IsNullOrEmpty(PlayerFolder)) {
                             Debug.LogError("Please specify simulator build folder!");
                             return;
                         }
@@ -608,13 +610,10 @@ namespace Simulator.Editor
 
                         assetBundlesLocation = Path.Combine(PlayerFolder, "AssetBundles");
                     }
-                    foreach (var group in buildGroups)
-                    {
+                    foreach (var group in buildGroups) {
                         group.Value.RunBuild(assetBundlesLocation);
                     }
-                }
-                finally
-                {
+                } finally {
                     Running = false;
                 }
             }
@@ -843,6 +842,7 @@ namespace Simulator.Editor
                 var r = BuildPipeline.BuildPlayer(build);
                 if (r.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded)
                 {
+
                     // TODO: this is temporary until we learn how to build WebUI output directly in Web folder
                     var webFolder = target == BuildTarget.MacOS ? Path.Combine(folder, "simulator.app") : folder;
                     var web = Path.Combine(webFolder, "Web");

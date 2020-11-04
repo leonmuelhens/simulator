@@ -36,7 +36,9 @@ public class SimulatorCameraController : MonoBehaviour
     //private Vector2 mouseScroll;
     private float zoomInput;
 
-    private Camera thisCamera;
+    private GameObject thisCamera;
+    //private Camera thisCamera;
+
     private Transform pivot;
     private Vector3 offset = new Vector3(0f, 2.25f, -7f);
     
@@ -67,7 +69,8 @@ public class SimulatorCameraController : MonoBehaviour
 
     private void Awake()
     {
-        thisCamera = GetComponentInChildren<Camera>();
+        //thisCamera = GetComponentInChildren<Camera>();
+        thisCamera = this.transform.GetChild(0).gameObject;
 
         controls = SimulatorManager.Instance.controls;
 
@@ -334,9 +337,11 @@ public class SimulatorCameraController : MonoBehaviour
         targetObject = target.transform;
         transform.position = targetObject.position;
         transform.rotation = targetObject.rotation;
+
         thisCamera.transform.localRotation = Quaternion.identity;
         thisCamera.transform.localPosition = Vector3.zero;
         thisCamera.transform.localPosition = thisCamera.transform.InverseTransformPoint(targetObject.position) + offset;
+
         defaultFollow = true;
         targetTiltFree = transform.eulerAngles.x;
         targetLookFree = transform.eulerAngles.y;
